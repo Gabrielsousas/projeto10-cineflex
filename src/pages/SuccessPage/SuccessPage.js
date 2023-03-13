@@ -4,19 +4,14 @@ import styled from "styled-components";
 export default function SuccessPage({
   clientName,
   clientCPF,
-  selectedSeats,
   sessionWeekday,
   movieName,
-  sessionTime,
   numeroDosAssentos,
   horario,
   setDivisor,
   setHorario,
+  setSessionWeekday
 }) {
-  const handleButtonClick = (name) => {
-    setHorario("");
-    setDivisor("");
-  };
   return (
     <PageContainer>
       <h1>
@@ -51,7 +46,7 @@ export default function SuccessPage({
       </TextContainer>
 
       <Link to="/">
-        <button onClick={()=> handleButtonClick} data-test="go-home-btn">Voltar para Home</button>
+        <button data-test="go-home-btn">Voltar para Home</button>
       </Link>
     </PageContainer>
   );

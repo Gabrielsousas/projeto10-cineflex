@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Footer from "../Footer/Footer";
 
-export default function SessionsPage({ movieName, sessionTime, sessionWeekday, setHorario, setDivisor, setMovieName}) {
+export default function SessionsPage({ movieName, sessionTime, sessionWeekday, setHorario, setDivisor, setMovieName, setSessionWeekday}) {
   const params = useParams();
   const idFilme = params.idFilme;
   const [date, setDate] = useState([]);
@@ -25,6 +25,7 @@ export default function SessionsPage({ movieName, sessionTime, sessionWeekday, s
       setDias(response.data.days);
       setImgMovie(response.data.posterURL);
       setMovieName(response.data.title);
+      setSessionWeekday("")
     });
   }, [idFilme]);
 
