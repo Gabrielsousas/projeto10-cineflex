@@ -1,4 +1,4 @@
-import { useActionData, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -16,26 +16,24 @@ export default function SessionsPage() {
       setDate(response.data);
       setDias(response.data.days);
     });
-  }, []);
+  }, [])
 
-  console.log("date", date);
-  console.log("dias", dias);
-
-
+  console.log(params)
   return (
     <PageContainer>
       Selecione o horário
       <div>
         {/* Aqui adicionamos um map que está renderizando as datas das sessões */}
         {dias.map((m) => (
-          <SessionContainer>
+          <SessionContainer key={m.id}>
             {m.weekday} - {m.date}
             <ButtonsContainer>
               {/* Aqui iniciamos um segundo map que irá renderizar os botões com os  horários de exibição dos filmes */}
-              {m.showtimes.map((n) =>  
-              <button>
-                {n.name}
-              </button>)}
+              {m.showtimes.map((n) => (
+                <Link key={n.id} to={`/assentos/${n.id}`}>
+                  <button>{n.name}</button>
+                </Link>
+              ))}
             </ButtonsContainer>
           </SessionContainer>
         ))}
