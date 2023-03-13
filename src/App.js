@@ -12,10 +12,12 @@ export default function App() {
   const [imgMovie, setImgMovie] = useState([
     "https://media.tenor.com/wpSo-8CrXqUAAAAi/loading-loading-forever.gif",
   ]);
-  const [sessionWeekday, setSessonWeekday] = useState("loading");
-  const [sessionTime, setsessionTime] = useState("loading...");
+  const [sessionWeekday, setSessionWeekday] = useState("");
+  const [sessionTime, setsessionTime] = useState("");
   const [movieName, setMovieName] = useState("");
-  const numeroDosAssentos = []
+  const [divisor, setDivisor] = useState("");
+  const [horario, setHorario] = useState("");
+  const numeroDosAssentos = [];
 
   return (
     <>
@@ -28,6 +30,8 @@ export default function App() {
             path="/assentos/:idSessao"
             element={
               <SeatsPage
+                horario={horario}
+                divisor={divisor}
                 clientName={clientName}
                 setClientName={setClientName}
                 clientCPF={clientCPF}
@@ -35,7 +39,7 @@ export default function App() {
                 imgMovie={imgMovie}
                 setImgMovie={setImgMovie}
                 sessionWeekday={sessionWeekday}
-                setSessonWeekday={setSessonWeekday}
+                setSessionWeekday={setSessionWeekday}
                 sessionTime={sessionTime}
                 setsessionTime={setsessionTime}
                 movieName={movieName}
@@ -44,11 +48,36 @@ export default function App() {
               />
             }
           />
-          <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
+          <Route
+            path="/sessoes/:idFilme"
+            element={
+              <SessionsPage
+            setSessionWeekday={setSessionWeekday}
+                setDivisor={setDivisor}
+                setHorario={setHorario}
+                movieName={movieName}
+                setMovieName={setMovieName}
+                sessionTime={sessionTime}
+                sessionWeekday={sessionWeekday}
+                setImgMovie={setImgMovie}
+              />
+            }
+          />
           <Route
             path="/sucesso"
             element={
-              <SuccessPage clientName={clientName} clientCPF={clientCPF} movieName={movieName} sessionTime={sessionTime} sessionWeekday={sessionWeekday} numeroDosAssentos={numeroDosAssentos}/>
+              <SuccessPage
+                setHorario={setHorario}
+                setDivisor={setDivisor}
+                setSessionWeekday={setSessionWeekday}
+                horario={horario}
+                clientName={clientName}
+                clientCPF={clientCPF}
+                movieName={movieName}
+                sessionTime={sessionTime}
+                sessionWeekday={sessionWeekday}
+                numeroDosAssentos={numeroDosAssentos}
+              />
             }
           />
         </Routes>

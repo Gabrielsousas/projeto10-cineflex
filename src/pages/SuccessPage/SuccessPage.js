@@ -8,9 +8,15 @@ export default function SuccessPage({
   sessionWeekday,
   movieName,
   sessionTime,
-  numeroDosAssentos
+  numeroDosAssentos,
+  horario,
+  setDivisor,
+  setHorario,
 }) {
-  console.log(selectedSeats);
+  const handleButtonClick = (name) => {
+    setHorario("");
+    setDivisor("");
+  };
   return (
     <PageContainer>
       <h1>
@@ -23,7 +29,7 @@ export default function SuccessPage({
         </strong>
         <p>{movieName}</p>
         <p>
-          {sessionWeekday} - {sessionTime}
+          {sessionWeekday} - {horario}
         </p>
       </TextContainer>
 
@@ -31,7 +37,9 @@ export default function SuccessPage({
         <strong>
           <p>Ingressos</p>
         </strong>
-        {numeroDosAssentos.map((ingresso) =><p>Assento {ingresso}</p>)}
+        {numeroDosAssentos.map((ingresso) => (
+          <p>Assento {ingresso}</p>
+        ))}
       </TextContainer>
 
       <TextContainer data-test="client-info">
@@ -43,7 +51,7 @@ export default function SuccessPage({
       </TextContainer>
 
       <Link to="/">
-        <button data-test="go-home-btn">Voltar para Home</button>
+        <button onClick={()=> handleButtonClick} data-test="go-home-btn">Voltar para Home</button>
       </Link>
     </PageContainer>
   );

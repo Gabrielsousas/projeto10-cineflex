@@ -2,12 +2,20 @@ import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Footer from "../Footer/Footer";
 
-export default function SessionsPage() {
+export default function SessionsPage({ movieName, sessionTime, sessionWeekday, setHorario, setDivisor, setMovieName}) {
   const params = useParams();
   const idFilme = params.idFilme;
   const [date, setDate] = useState([]);
   const [dias, setDias] = useState([]);
+  const [imgMovie, setImgMovie] = useState("");
+  const handleButtonClick = (name) => {
+    setHorario(name);
+    setDivisor("-");
+  };
+
+
   useEffect(() => {
     const promise = axios.get(
       `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`
@@ -15,9 +23,11 @@ export default function SessionsPage() {
     promise.then((response) => {
       setDate(response.data);
       setDias(response.data.days);
+      setImgMovie(response.data.posterURL);
+      setMovieName(response.data.title);
     });
-  }, [])
-  
+  }, [idFilme]);
+
   return (
     <PageContainer>
       Selecione o horário
@@ -30,24 +40,23 @@ export default function SessionsPage() {
               {/* Aqui iniciamos um segundo map que irá renderizar os botões com os  horários de exibição dos filmes */}
               {m.showtimes.map((n) => (
                 <Link key={n.id} to={`/assentos/${n.id}`}>
-                  <button data-test="showtime">{n.name}</button>
+                  <button onClick={() => handleButtonClick(n.name)} data-test="showtime">{n.name}</button>
                 </Link>
               ))}
             </ButtonsContainer>
           </SessionContainer>
         ))}
       </div>
-      <FooterContainer data-test="footer">
-        <div>
-          <img src={date.posterURL} alt={date.title} />
-        </div>
-        <div>
-          <p>{date.title}</p>
-        </div>
-      </FooterContainer>
+      <Footer
+        imgMovie={imgMovie}
+        movieName={movieName}
+        sessionWeekday={sessionWeekday}
+        sessionTime={sessionTime}
+      />
     </PageContainer>
   );
 }
+
 
 const PageContainer = styled.div`
   display: flex;
@@ -81,43 +90,5 @@ const ButtonsContainer = styled.div`
   }
   a {
     text-decoration: none;
-  }
-`;
-const FooterContainer = styled.div`
-  width: 100%;
-  height: 120px;
-  background-color: #c3cfd9;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-size: 20px;
-  position: fixed;
-  bottom: 0;
-
-  div:nth-child(1) {
-    box-shadow: 0px 2px 4px 2px #0000001a;
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    margin: 12px;
-    img {
-      width: 50px;
-      height: 70px;
-      padding: 8px;
-    }
-  }
-
-  div:nth-child(2) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    p {
-      text-align: left;
-      &:nth-child(2) {
-        margin-top: 10px;
-      }
-    }
   }
 `;
