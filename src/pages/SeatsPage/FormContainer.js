@@ -22,7 +22,7 @@ export default function FormContainer({
       <form onSubmit={handleSubmit}>
         Nome do Comprador:
         <input
-          required
+          required // adicionando o atributo required
           type="text"
           data-test="client-name"
           value={clientName}
@@ -42,12 +42,11 @@ export default function FormContainer({
         <button
           data-test="book-seat-btn"
           type="submit"
-          required
           onClick={(e) => {
             e.preventDefault();
             const selectedSeats = [];
             const newSeats = seats.filter((seat) => {
-              if (seat.isSelected) {
+              if (seat.isSelected && clientName.length > 0 && clientCPF.length > 0) {
                 selectedSeats.push(seat.id);
                 numeroDosAssentos.push(seat.name);
                 return true;
@@ -55,7 +54,7 @@ export default function FormContainer({
               return false;
             });
 
-            if (selectedSeats.length > 0) {
+            if (selectedSeats.length > 0 && clientName.length > 0 && clientCPF.length > 0) {
               const promise = axios.post(
                 "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many",
                 {

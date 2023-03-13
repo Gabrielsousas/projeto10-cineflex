@@ -39,6 +39,8 @@ export default function SeatsPage({
       setsessionTime(response.data.day.date);
       setSeats(response.data.seats);
       setMovieName(response.data.movie.title);
+      setClientCPF("")
+      setClientName("")
     });
   }, []);
 
