@@ -61,7 +61,8 @@ export default function SeatsPage({
       Selecione o(s) assento(s)
       <SeatsContainer>
         {seats.map((seat) => (
-          <SeatItem
+          <SeatItem 
+            data-test="seat"
             key={seat.name}
             isAvailable={seat.isAvailable}
             isSelected={seat.isSelected}
@@ -95,18 +96,21 @@ export default function SeatsPage({
       <FormContainer>
         <form onSubmit={handleSubmit}>
           Nome do Comprador:
-          <input
+          <input 
+            data-test="client-name"
             value={clientName}
             onChange={(e) => setClientName(e.target.value)}
             placeholder="Digite seu nome..."
           />
           CPF do Comprador:
           <input
+            data-test="client-cpf"
             value={clientCPF}
             onChange={(e) => setClientCPF(e.target.value)}
             placeholder="Digite seu CPF..."
           />
           <button
+            data-test="book-seat-btn"
             type="Submit"
             required
             onClick={() => {
@@ -142,7 +146,7 @@ export default function SeatsPage({
           </button>
         </form>
       </FormContainer>
-      <FooterContainer>
+      <FooterContainer data-test="footer">
         <div>
           <img src={imgMovie} />
         </div>

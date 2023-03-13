@@ -24,20 +24,20 @@ export default function SessionsPage() {
       <div>
         {/* Aqui adicionamos um map que está renderizando as datas das sessões */}
         {dias.map((m) => (
-          <SessionContainer key={m.id}>
+          <SessionContainer data-test="movie-day" key={m.id}>
             {m.weekday} - {m.date}
             <ButtonsContainer>
               {/* Aqui iniciamos um segundo map que irá renderizar os botões com os  horários de exibição dos filmes */}
               {m.showtimes.map((n) => (
                 <Link key={n.id} to={`/assentos/${n.id}`}>
-                  <button>{n.name}</button>
+                  <button data-test="showtime">{n.name}</button>
                 </Link>
               ))}
             </ButtonsContainer>
           </SessionContainer>
         ))}
       </div>
-      <FooterContainer>
+      <FooterContainer data-test="footer">
         <div>
           <img src={date.posterURL} alt={date.title} />
         </div>
