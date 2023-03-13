@@ -4,13 +4,10 @@ import styled from "styled-components";
 export default function SuccessPage({
   clientName,
   clientCPF,
-  sessionWeekday,
   movieName,
   numeroDosAssentos,
   horario,
-  setDivisor,
-  setHorario,
-  setSessionWeekday
+  sessionTime
 }) {
   return (
     <PageContainer>
@@ -24,7 +21,7 @@ export default function SuccessPage({
         </strong>
         <p>{movieName}</p>
         <p>
-          {sessionWeekday} - {horario}
+          {sessionTime} {horario}
         </p>
       </TextContainer>
 
