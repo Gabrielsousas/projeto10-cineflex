@@ -1,20 +1,29 @@
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function SeatsPage() {
+export default function SeatsPage({
+  clientName,
+  setClientName,
+  clientCPF,
+  setClientCPF,
+  imgMovie,
+  setImgMovie,
+  sessionWeekday,
+  setSessonWeekday,
+  sessionTime,
+  setsessionTime,
+  movieName,
+  setMovieName,
+  numeroDosAssentos
+}) {
   const params = useParams();
   const idSessao = params.idSessao;
   const [response, setResponse] = useState([]);
   const [seats, setSeats] = useState([]);
-  const [imgMovie, setImgMovie] = useState([
-    "https://media.tenor.com/wpSo-8CrXqUAAAAi/loading-loading-forever.gif",
-  ]);
-  const [sessionWeekday, setSessonWeekday] = useState("loading");
-  const [sessionTime, setsessionTime] = useState("loading...");
-  const [movieName, setMovieName] = useState("");
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const promise = axios.get(
@@ -30,6 +39,21 @@ export default function SeatsPage() {
     });
   }, []);
 
+  function handleSeatClick(seatName) {
+    const newSeats = seats.map((seat) => {
+      if (seat.name === seatName) {
+        return { ...seat, isSelected: !seat.isSelected };
+      } else {
+        return seat;
+      }
+    });
+    setSeats(newSeats);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+  }
+
   console.log("seats", response);
 
   return (
@@ -40,11 +64,20 @@ export default function SeatsPage() {
           <SeatItem
             key={seat.name}
             isAvailable={seat.isAvailable}
+            isSelected={seat.isSelected}
+            onClick={() => {
+              if (seat.isAvailable) {
+                handleSeatClick(seat.name);
+              } else {
+                alert("Esse assento não está disponível");
+              }
+            }}
           >
             {seat.name}
           </SeatItem>
         ))}
       </SeatsContainer>
+      ...
       <CaptionContainer>
         <CaptionItem>
           <CaptionCircle isSelected={true} />
@@ -60,11 +93,54 @@ export default function SeatsPage() {
         </CaptionItem>
       </CaptionContainer>
       <FormContainer>
-        Nome do Comprador:
-        <input placeholder="Digite seu nome..." />
-        CPF do Comprador:
-        <input placeholder="Digite seu CPF..." />
-        <button>Reservar Assento(s)</button>
+        <form onSubmit={handleSubmit}>
+          Nome do Comprador:
+          <input
+            value={clientName}
+            onChange={(e) => setClientName(e.target.value)}
+            placeholder="Digite seu nome..."
+          />
+          CPF do Comprador:
+          <input
+            value={clientCPF}
+            onChange={(e) => setClientCPF(e.target.value)}
+            placeholder="Digite seu CPF..."
+          />
+          <button
+            type="Submit"
+            required
+            onClick={() => {
+              const selectedSeats = [];
+              const newSeats = seats.filter((seat) => {
+                if (seat.isSelected) {
+                  selectedSeats.push(seat.id);
+                  numeroDosAssentos.push(seat.name)
+                }
+              });
+              console.log("selected seats", selectedSeats);
+              const promise = axios.post(
+                "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many",
+                {
+                  ids: selectedSeats,
+                  name: { clientName },
+                  cpf: { clientCPF },
+                }
+              );
+              promise.then(() =>
+                // console.log("sucesso", clientName, clientCPF)
+                navigate("/sucesso")
+              );
+
+              promise.catch(() =>
+                alert(
+                  "Ops, algo deu errado. Por favor recarregue a página. Se o erro persistir entre em contato com a central de atendimento"
+                )
+              );
+            }}
+          >
+            Reservar Assento(s)
+          </button>
+        </form>
       </FormContainer>
       <FooterContainer>
         <div>
@@ -124,8 +200,18 @@ const CaptionContainer = styled.div`
   margin: 20px;
 `;
 const CaptionCircle = styled.div`
-  border: ${seat => seat.isSelected ? '#0E7D71' : (seat.isAvailable ? '1px solid #808F9D' : '1px solid #F7C52B')}; // Essa cor deve mudar
-  background-color:  ${seat =>seat.isSelected ? '#1AAE9E' : (seat.isAvailable ? '#C3CFD9  ' : '#FBE192')}; // Essa cor deve mudar
+  border: ${(seat) =>
+    seat.isSelected
+      ? "1px solid #0E7D71"
+      : seat.isAvailable
+      ? "1px solid #808F9D"
+      : "1px solid #F7C52B"}; // Essa cor deve mudar
+  background-color: ${(seat) =>
+    seat.isSelected
+      ? "#1AAE9E"
+      : seat.isAvailable
+      ? "#C3CFD9  "
+      : "#FBE192"}; // Essa cor deve mudar
   height: 25px;
   width: 25px;
   border-radius: 25px;
@@ -141,8 +227,18 @@ const CaptionItem = styled.div`
   font-size: 12px;
 `;
 const SeatItem = styled.div`
-  border:${seat => seat.isSelected ? '#0E7D71' : (seat.isAvailable ? '1px solid #808F9D' : '1px solid #F7C52B')};; // Essa cor deve mudar
-  background-color: ${seat =>seat.isSelected ? '#1AAE9E' : (seat.isAvailable ? '#C3CFD9  ' : '#FBE192')};; // Essa cor deve mudar
+  border: ${(seat) =>
+    seat.isSelected
+      ? "1px solid #0E7D71"
+      : seat.isAvailable
+      ? "1px solid #808F9D"
+      : "1px solid #F7C52B"}; // Essa cor deve mudar
+  background-color: ${(seat) =>
+    seat.isSelected
+      ? "#1AAE9E"
+      : seat.isAvailable
+      ? "#C3CFD9  "
+      : "#FBE192"}; // Essa cor deve mudar
   height: 25px;
   width: 25px;
   border-radius: 25px;

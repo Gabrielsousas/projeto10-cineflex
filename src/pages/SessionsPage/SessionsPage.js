@@ -17,8 +17,7 @@ export default function SessionsPage() {
       setDias(response.data.days);
     });
   }, [])
-
-  console.log(params)
+  
   return (
     <PageContainer>
       Selecione o horário
